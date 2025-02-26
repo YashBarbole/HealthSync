@@ -1,15 +1,14 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
-import { AdminAuthContext } from "../../context/AdminContext";
+import { AdminContext } from "../../context/AdminContext"; // Corrected import
 
 const AdminHomepage = () => {
-  const { admin, adminlogout } = useContext(AdminAuthContext);
+  const { admin, logout } = useContext(AdminContext); // Corrected usage
   const navigate = useNavigate();
 
   const logoutPressed = async () => {
     try {
-      await adminlogout();
+      await logout();
       navigate("/"); // Redirect to landing page
     } catch (error) {
       console.error("Logout failed", error);

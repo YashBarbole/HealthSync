@@ -1,10 +1,10 @@
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AdminAuthContext } from "../context/AdminContext";
+import { AdminContext } from "../context/AdminContext";
 import axios from "axios";
 
-const UserLogin = () => {
-  const { login } = useContext(AdminAuthContext); // Use login function from AuthContext
+const AdminLogin = () => {
+  const { login } = useContext(AdminContext); // Use login function from AdminContext
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -18,27 +18,15 @@ const UserLogin = () => {
     setError(null);
 
     try {
-      const response = await axios.post(
-        "http://localhost:3000/admin/adminlogin",
-        { email, password },
-        { withCredentials: true }
-      );
-
-      if (response.status === 200) {
-        console.log("Login successful, updating context...");
-        login(email, password);
-        navigate("/admindashboard/adminhomepage");
-      } else {
-        setError("Invalid credentials");
-      }
+      await login(email, password); // Let the context handle authentication
+      navigate("/admindashboard/adminhomepage");
     } catch (error) {
       setError("Login failed, please try again.");
-      console.error("Login error:", error.response?.data || error.message);
+      console.error("Login error:", error);
     } finally {
       setLoading(false);
     }
   };
-
 
   const handleRegister = () => {
     navigate("/adminregister"); // Navigate to the /register route when button is clicked
@@ -103,4 +91,4 @@ const UserLogin = () => {
   );
 };
 
-export default UserLogin;
+export default AdminLogin;
